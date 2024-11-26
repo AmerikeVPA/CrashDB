@@ -12,12 +12,12 @@ namespace CrashDB.Clases
 {
     internal class CCrashBandicootDB
     {
+        CConnection connectionObj = new CConnection();
         public void ShowPlayers(DataGridView crashTable)
         {
             try
             {
-                CConnection connectionObj = new CConnection();
-                string query = "SELECT * FROM pet";
+                string query = "SELECT * FROM player";
                 crashTable.DataSource = null;
                 MySqlDataAdapter adapter = new MySqlDataAdapter(query, connectionObj.connectToDB());
                 DataTable DT = new DataTable();
@@ -31,17 +31,17 @@ namespace CrashDB.Clases
             }
         }
 
-        public void AddPlayer(TextBox nombre,/* NumericUpDown level, NumericUpDown score, */DateTimePicker lastConnection)
+        public void AddPlayer(TextBox playerName, DateTimePicker lastConnection)
         {
             try
             {
-                CConnection objConexion = new CConnection();
+                string formatForMySql = lastConnection.Value.ToString("yyyy-MM-dd HH:mm");
                 string query = "INSERT INTO player (Nickname, LastConnection) " +
-                    $"values ('{nombre.Text}', '{lastConnection.Text}';";
-                MySqlCommand myCommand = new MySqlCommand(query, objConexion.connectToDB());
+                    $"values ('{playerName.Text}', '{formatForMySql}');";
+                MySqlCommand myCommand = new MySqlCommand(query, connectionObj.connectToDB());
                 MySqlDataReader reader = myCommand.ExecuteReader();
                 MessageBox.Show("Datos insertados correctamente");
-                objConexion.cerrarConexion();
+                connectionObj.cerrarConexion();
             }
             catch (Exception ex)
             {
@@ -49,16 +49,18 @@ namespace CrashDB.Clases
             }
         }
 
-        public void UpdatePlayer(TextBox nombre, TextBox propietario, TextBox especie, TextBox sexo, TextBox birth)
+        public void UpdatePlayer(TextBox playerName, DateTimePicker lastConnection)
         {
             try
             {
-                CConnection objConexion = new CConnection();
-                string query = "UPDATE pet SET owner= '{propietario.Text}', species= '{especie.Text}', sex= '{sexo.Text}', birth= '{birth.Text}' WHERE name= '{nombre.Text}';";
-                MySqlCommand myCommand = new MySqlCommand(query, objConexion.connectToDB());
+                string formatForMySql = lastConnection.Value.ToString("yyyy-MM-dd HH:mm");
+                string query = "UPDATE player " +
+                    $"SET Nickname = '{playerName.Text}', LastConnection = '{formatForMySql}'" +
+                    $"WHERE Nickname = '{playerName.Text}';";
+                MySqlCommand myCommand = new MySqlCommand(query, connectionObj.connectToDB());
                 MySqlDataReader reader = myCommand.ExecuteReader();
                 MessageBox.Show("Datos insertados correctamente");
-                objConexion.cerrarConexion();
+                connectionObj.cerrarConexion();
             }
             catch (Exception ex)
             {

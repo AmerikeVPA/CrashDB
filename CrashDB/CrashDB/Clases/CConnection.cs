@@ -16,7 +16,12 @@ namespace CrashDB.Clases
         static string password = "WoombaFruit5";
         static string puerto = "3306";
 
-        string conexion = "server=" + servidor + ";" + "port=" + puerto + ";" + "user id=" + usuario + ";" + "password=" + password + ";" + "database=" + bd + ";";
+        string conexion = "server=" + servidor + ";" 
+            + "port=" + puerto + ";" 
+            + "user id=" + usuario + ";" 
+            + "password=" + password + ";" 
+            + "database=" + bd + ";" 
+            + "Convert Zero Datetime=True";
 
         public MySqlConnection connectToDB()
         {

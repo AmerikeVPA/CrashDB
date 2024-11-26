@@ -31,21 +31,18 @@ namespace CrashDB
             try
             {
                 CConnection objConexion = new CConnection();
-                string query = "SELECT * FROM pet WHERE name = @nombre";
+                string query = "SELECT * FROM player WHERE Nickname = @nombre";
                 MySqlCommand myCommand = new MySqlCommand(query, objConexion.connectToDB());
                 myCommand.Parameters.AddWithValue("@nombre", playerTag.Text);
                 MySqlDataReader reader = myCommand.ExecuteReader();
                 if (reader.Read())
                 {
-                    MessageBox.Show("Mascota registrada");
-                    textBox2.Text = reader["owner"].ToString();
-                    textBox3.Text = reader["sex"].ToString();
-                    textBox4.Text = reader["species"].ToString();
-                    textBox5.Text = reader["birth"].ToString();
+                    MessageBox.Show("Player located");
+                    lastConnection.Value = DateTime.Parse(reader["LastConnection"].ToString());
                 }
                 else
                 {
-                    MessageBox.Show("Mascota no registrada");
+                    MessageBox.Show("Player not found");
                 }
             }
             catch (Exception ex)
@@ -63,7 +60,7 @@ namespace CrashDB
         private void updateButton_Click(object sender, EventArgs e)
         {
             Clases.CCrashBandicootDB crashObj = new Clases.CCrashBandicootDB();
-            crashObj.UpdatePlayer(playerTag, textBox2, textBox3, textBox4, textBox5);
+            crashObj.UpdatePlayer(playerTag, lastConnection);
             crashObj.ShowPlayers(crashDBView);
         }
     }
